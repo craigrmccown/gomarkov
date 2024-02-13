@@ -29,6 +29,23 @@ func (s sparseArray) orderedKeys() []int {
 	return keys
 }
 
+func (s sparseArray) orderedPairs() [][2]int {
+	pairs := make([][2]int, 0, len(s))
+	for k, v := range s {
+		pairs = append(pairs, [2]int{k, v})
+	}
+
+	// Sort in reverse order by frequency so that the higest probability appears
+	// first. Use the key as a tie-breaker.
+	sort.Slice(pairs, func(a, b int) bool {
+		if pairs[a][1] == pairs[b][1] {
+			return pairs[a][0] < pairs[b][0]
+		}
+		return pairs[a][1] > pairs[b][1]
+	})
+	return pairs
+}
+
 func (s sparseArray) sum() int {
 	sum := 0
 	for _, count := range s {

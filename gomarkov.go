@@ -141,9 +141,9 @@ func (chain *Chain) GenerateDeterministic(current NGram, prng PRNG) (string, err
 	arr := chain.frequencyMat[currentIndex]
 	sum := arr.sum()
 	randN := prng.Intn(sum)
-	keys := arr.orderedKeys()
-	for _, key := range keys {
-		freq := arr[key]
+	pairs := arr.orderedPairs()
+	for _, p := range pairs {
+		key, freq := p[0], p[1]
 		randN -= freq
 		if randN <= 0 {
 			return chain.statePool.intMap[key], nil
